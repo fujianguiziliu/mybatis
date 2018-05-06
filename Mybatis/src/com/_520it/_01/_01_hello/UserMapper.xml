@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+     <!DOCTYPE mapper
+  	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com._520it._01_hello.UserMapper">
+	<!-- parameterType:指定执行sql需要传递进来的参数的类型
+		useGeneratedKeys：指定是否需要获取自动生成的主键，true表示要
+		keyColumn：主键在表中的名称
+		keyProperty：主键在java对象中的属性名称
+	
+	-->
+	<resultMap type="User" id="userMapper">
+	<result property="id" column="id" />
+	<result property="name" column="name" />
+	<result property="salary" column="salary" />
+	<result property="hireDate" column="hireDate" />
+
+	
+	</resultMap>
+	<!-- <resultMap type="User" id="UserMapper">
+	
+		property：属性名
+		column：列名
+		javaType：在java中的数据类型
+		jdbcType:使用JDBC中的数据类型
+	
+	<id property="id" column="uid"/>
+	<result property="name" column="uname" />
+	<result property="salary" column="salary"/>
+	<result property="hireDate" column="hireDate"/>
+	
+	</resultMap> -->
+	
+	<insert id="save" parameterType="User"
+	useGeneratedKeys="true" keyColumn="id" keyProperty="id"
+
+	>
+	INSERT INTO 
+	user(name,salary,hireDate) 
+	VALUES(#{name},#{salary},#{hireDate})
+
+
+	</insert>
+	<update id="update" parameterType="User">
+	UPDATE user SET
+	name=#{name},salary=#{salary},hireDate=#{hireDate}
+	WHERE id=#{id}
+
+	</update>
+	<delete id="delete" parameterType="long">
+	DELETE FROM user where
+	id=#{id}
+	</delete>
+
+	<select id="get" parameterType="long" resultMap="UserMapper">
+	SELECT id
+	uid, name uname, salary,hireDate FROM
+	user WHERE id=#{id}
+
+
+	</select>
+	<select id="list" resultType="User">
+	SELECT * FROM user
+	</select>
+	<!-- 抽取sql的列（片段） -->
+	 <!-- <sql id="column_sql">
+		id,name,salary,hireDate
+		</sql>
+	<select id="get" parameterType="long" resultMap="userMapper">
+		SELECT <include refid="column_sql"></include> FROM 
+		user WHERE id=#{id}
+	
+	</select>
+	-->
+	<!-- 抽取sql，不好的一种 -->
+	 <sql id="base_sql">
+		<where>
+			<if test="name!=null">
+				name LIKE concat('%',#{name},'%')
+			
+			</if>
+			<if test="minSalary!=null">
+				AND salary &lt;= #{minSalary}
+			
+			</if>
+			
+			<if test="maxSalary!=null">
+				AND salary &gt;=  #{maxSalary}
+			
+			</if>
+			<if test="ids!=null">
+				AND id IN
+			
+			<foreach collection="ids" open="(" item="id" separator="," 
+				close=")">
+				#{id}
+			</foreach>
+			</if>
+		</where>
+	
+	</sql> 
+	 <select id="getListData" parameterType="userQO" resultType="User">
+		SELECT * FROM user
+		<include refid="base_sql"></include>
+		LIMIT #{beginIndex},#{pageSize}
+	</select>
+	
+	<!-- <select id="getListData" parameterType="userQO" resultType="User">
+		SELECT * FROM user
+		<where>
+			<if test="name!=null">
+				name LIKE concat('%',#{name},'%')
+			
+			</if>
+			<if test="minSalary!=null">
+				AND salary &lt;= #{minSalary}
+			
+			</if>
+			
+			<if test="maxSalary!=null">
+				AND salary &gt;=  #{maxSalary}
+			
+			</if>
+			<if test="ids!=null">
+				AND id IN
+			
+			<foreach collection="ids" open="(" item="id" separator="," 
+				close=")">
+				#{id}
+			</foreach>
+			</if>
+		</where>
+		LIMIT #{beginIndex},#{pageSize}
+	
+	</select> -->
+	  <select id="getTotalCount" parameterType="userQO" resultType="long">
+		SELECT * FROM user
+		<include refid="base_sql"></include>
+		
+	</select>
+	<!-- <select id="getTotalCount" parameterType="userQO" resultType="long">
+	SELECT COUNT(*) FROM user
+	  <where>
+			<if test="name!=null">
+				name LIKE concat('%',#{name},'%')
+			
+			</if>
+			<if test="minSalary!=null">
+				AND salary &lt;= #{minSalary}
+			
+			</if>
+			
+			<if test="maxSalary!=null">
+				AND salary &gt;=  #{maxSalary}
+			
+			</if>
+			<if test="ids!=null">
+				AND id IN
+			
+			<foreach collection="ids" open="(" item="id" separator="," 
+				close=")">
+				#{id}
+			</foreach>
+			</if>
+		</where>
+		</select>-->
+	<!-- 用下面trim也可以 -->
+		<!--<trim prefix="WHERE" prefixOverrides="AND|OR|and|or">
+			<if test="name!=null">
+				name LIKE concat('%',#{name},'%')
+			
+			</if>
+			<if test="minSalary!=null">
+				AND salary &lt;= #{minSalary}
+			
+			</if>
+			
+			<if test="maxSalary!=null">
+				AND salary &gt;=  #{maxSalary}
+			
+			</if>
+			<if test="ids!=null">
+				AND id IN
+			
+			<foreach collection="ids" open="(" item="id" separator="," 
+				close=")">
+				#{id}
+			</foreach>
+			</if>
+		</trim>-->
+</mapper>

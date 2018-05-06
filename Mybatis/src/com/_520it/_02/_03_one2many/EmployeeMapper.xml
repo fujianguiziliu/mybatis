@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE mapper
+  	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com._520it._02._03_one2many.EmployeeMapper">
+	 <resultMap type="Employee" id="base_mapping">
+   		 <result property="id" column="id" />
+		<result property="name" column="name" />
+		<!-- 
+		property：对象中的属性名
+		javaType：指定当前的关联的对象的类型
+		select：指定让MyBatis发送的SQL，使用sql对应的statement来指定
+		 -->
+		<!-- <association property="dept" javaType="Department" 
+		select="com._520it._02._02_many2one.DepartmentMapper.get"
+		column="dept_id"></association> -->
+		<!-- <association property="dept" javaType="Department">
+		<id property="id" column="did" />
+		<result property="name" column="dname" />
+		
+		</association> -->
+		
+  	</resultMap>
+  	<insert id="save" useGeneratedKeys="true" keyColumn="id"
+  	keyProperty="id">
+  		insert into
+  		employee(name) 
+  		values(#{name}) 	 			
+  	</insert>
+  	
+  	<update id="updateRelation">
+  		update employee set dept_id=#{did} 
+  		where id=#{eid}
+  	
+  	</update>
+  	<select id="get" resultMap="base_mapping">
+  		select * from employee where
+  		id=#{id}
+  	</select>
+  	
+  	<!-- 使用如下内联查询解决了N+1问题 -->
+  	<select id="list" resultMap="base_mapping">
+  		
+  	</select>
+  	
+  	<select id="getByDeptId" resultMap="base_mapping">
+  	select * from employee where
+  	dept_id=#{did}
+  	</select>
+  </mapper>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-config.dtd">
+   <configuration>
+   <!-- 第二种：引入属性文件 -->
+   	<properties resource="db.properties"></properties>
+   	
+   	<settings>
+  	 	<!-- 开启延迟加载 -->
+   		<setting name="lazyLoadingEnabled" value="true"/>
+   		<!-- 禁止访问主对象中的所有的属性都会去接触发延迟加载-->
+   		<setting name="aggressiveLazyLoading" value="false"/>
+   		<!-- 指定哪些object中的方法可以触发延迟加载 -->
+   		 <setting name="lazyLoadTriggerMethods" value="clone"/>
+   		
+   		
+   	</settings>
+   <!-- 配置数据库的环境 在实际开发中，数据库的环境可能多个：
+   	比如：测试环境/开发环境/生产环境 default：默认使用哪一个环境
+    -->
+    <typeAliases>
+    <!--  type:要为哪个类型指定别名
+    		alias:指定的别名
+     -->
+    	<!-- <typeAlias type="com._520it._01_hello.User" alias="User"/>
+   	 	<typeAlias type="com._520it._01_hello.UserQueryObject" alias="userQO"/> -->
+   	 	<!-- <typeAlias type="com._520it._02._01_param.User" alias="User"/> -->
+   	 	<typeAlias type="com._520it._02._03_one2many.Employee" 
+   	 	alias="Employee"/>
+   	 	<typeAlias type="com._520it._02._03_one2many.Department" 
+   	 	alias="Department"/>
+    </typeAliases>
+   	<environments default="develop">
+   		<!-- 开发环境 -->
+   		<environment id="develop">
+   		<!-- 配置事务管理器：jdbc,使用jdbc的事务管理 -->
+   		<transactionManager type="JDBC"/>
+   		<!-- 配置连接池
+   			pooled：使用mybatis自身实现的连接池对象
+   		
+   		 -->
+   		<dataSource type="POOLED">
+   			<property name="driver" value="${db.driver}"/>
+   			<property name="url" value="${db.url}"/>
+   			<property name="username" value="${db.username}"/>
+   			<property name="password" value="${db.password}"/>
+   		
+   		</dataSource>
+
+   			</environment>
+   		<!-- 假设还有环境，测试环境 -->
+   		<!--  <environment id="test"></environment> -->
+   	
+   	</environments>
+   <mappers>
+   <!-- 	<mapper resource="com/_520it/_01_hello/UserMapper.xml"/> -->
+   
+   <!--<mapper resource="com/_520it/_02/_01_param/UserMapper.xml"/>  -->	
+   	
+   	<mapper resource="com/_520it/_02/_03_one2many/EmployeeMapper.xml"/>
+   	<mapper resource="com/_520it/_02/_03_one2many/DepartmentMapper.xml"/>
+   </mappers>
+   
+   
+   
+   </configuration>

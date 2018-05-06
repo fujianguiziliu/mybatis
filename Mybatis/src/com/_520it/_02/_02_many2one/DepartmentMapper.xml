@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE mapper
+  	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com._520it._02._02_many2one.DepartmentMapper">
+   <resultMap type="department" id="base_mapping">
+   		 <result property="id" column="id" />
+		<result property="name" column="name" />	
+  	</resultMap>
+  	<insert id="save" useGeneratedKeys="true" keyColumn="id"
+  	keyProperty="id">
+  		insert into department(name)
+  		values(#{name})
+  	
+  	
+  	</insert>
+  	
+  	<select id="get" resultMap="base_mapping">
+  	SELECT * from department where
+  	id=#{id}
+  	
+  	</select>
+  </mapper>
